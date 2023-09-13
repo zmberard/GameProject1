@@ -1,3 +1,3 @@
 ﻿
-using var game = new GameProject1.Game1();
+using var game = new GameProject1.BoatGame();
 game.Run();
