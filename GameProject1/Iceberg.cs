@@ -9,15 +9,15 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GameProject1
 {
-    public class LifePreserver
+    public class Iceberg
     {
-        private const float ANIMATION_SPEED = 0.1f;
+        private const float ANIMATION_SPEED = 0.12f;
 
         private double animationTimer;
 
         private int animationFrame;
 
-        private Vector2 position;
+        public Vector2 position;
 
         private Texture2D texture;
 
@@ -33,10 +33,10 @@ namespace GameProject1
         /// Creates a new coin sprite
         /// </summary>
         /// <param name="position">The position of the sprite in the game</param>
-        public LifePreserver(Vector2 position)
+        public Iceberg(Vector2 position)
         {
             this.position = position;
-            this.bounds = new BoundingCircle(position + new Vector2(32, 32), 32);
+            this.bounds = new BoundingCircle(position + new Vector2(75, 100), 40);
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace GameProject1
         /// <param name="content">The ContentManager to load with</param>
         public void LoadContent(ContentManager content)
         {
-            texture = content.Load<Texture2D>("LifePreserver");
+            texture = content.Load<Texture2D>("Iceberg");
         }
 
         /// <summary>
@@ -55,17 +55,17 @@ namespace GameProject1
         /// <param name="spriteBatch">The spritebatch to render with</param>
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (Collected) return;
+            //if (Collected) return;
             animationTimer += gameTime.ElapsedGameTime.TotalSeconds;
 
             if (animationTimer > ANIMATION_SPEED)
             {
                 animationFrame++;
-                if (animationFrame > 6) animationFrame = 0;
+                if (animationFrame > 4) animationFrame = 0;
                 animationTimer -= ANIMATION_SPEED;
             }
-            
-            var source = new Rectangle(animationFrame * 64, 0, 64, 64);
+
+            var source = new Rectangle(animationFrame * 128, 0, 128, 128);
             spriteBatch.Draw(texture, position, source, Color.White);
         }
     }
