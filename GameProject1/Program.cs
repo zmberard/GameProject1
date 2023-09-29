@@ -1,3 +1,16 @@
-﻿
-using var game = new GameProject1.BoatGame();
-game.Run();
+﻿using System;
+
+namespace GameProject1
+{
+    public static class Program
+    {
+        [STAThread]
+        static void Main()
+        {
+            using (var game = new Game1())
+                game.Run();
+        }
+    }
+}
+
+

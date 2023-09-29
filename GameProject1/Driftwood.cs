@@ -22,12 +22,16 @@ namespace GameProject1
         private Texture2D texture;
 
         private BoundingRectangle bounds;
+
+        
         /// <summary>
         /// bonding volume of the sprite
         /// </summary>
         public BoundingRectangle Bounds => bounds;
 
-        public bool Collected { get; set; } = false;
+        public bool isHit { get; set; } = false;
+
+        public bool wasHit { get; set; } = false;
 
         /// <summary>
         /// Creates a new coin sprite

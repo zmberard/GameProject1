@@ -26,8 +26,10 @@ namespace GameProject1
         /// bonding volume of the sprite
         /// </summary>
         public BoundingCircle Bounds => bounds;
+        
+        public bool isHit { get; set; } = false;
 
-        public bool Collected { get; set; } = false;
+        public bool wasHit { get; set; } = false;
 
         /// <summary>
         /// Creates a new coin sprite

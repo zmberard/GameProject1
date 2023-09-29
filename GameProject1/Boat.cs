@@ -26,7 +26,7 @@ namespace GameProject1
         /// <summary>
         /// The game this boat is a part of
         /// </summary>
-        Game game;
+        //Game game;
 
         /// <summary>
         /// The texture to apply to a boat
@@ -66,19 +66,19 @@ namespace GameProject1
         /// </summary>
         /// <param name="game">The game this ball belongs in</param>
         /// <param name="color">A color to distinguish this ball</param>
-        public Boat(Game game)
+        /*public Boat(Game game)
         {
-            this.game = game;
-            
-            
+            //this.game = game;
+
         }
+        */
 
         /// <summary>
         /// Loads the boat's texture
         /// </summary>
         public void LoadContent(ContentManager content)
         {
-            texture = game.Content.Load<Texture2D>("BoatSprite");
+            texture = content.Load<Texture2D>("BoatSprite");
         }
         /// <summary>
         /// Updates the bat spire to fly in a direction
