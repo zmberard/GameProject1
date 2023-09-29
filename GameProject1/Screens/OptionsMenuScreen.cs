@@ -52,10 +52,10 @@ namespace GameProject1.Screens
         // Fills in the latest values for the options screen menu text.
         private void SetMenuEntryText()
         {
-            _ungulateMenuEntry.Text = $"Preferred ungulate: {_currentUngulate}";
+            _ungulateMenuEntry.Text = $"Controls - Arrow Keys";
             _languageMenuEntry.Text = $"Language: {Languages[_currentLanguage]}";
-            _frobnicateMenuEntry.Text = $"Frobnicate: {(_frobnicate ? "on" : "off")}";
-            _elfMenuEntry.Text = $"elf: {_elf.ToString()}";
+            _frobnicateMenuEntry.Text = "Objective - Collect all Life preservers";
+            _elfMenuEntry.Text = "And Avoid all ostacles";
         }
 
         private void UngulateMenuEntrySelected(object sender, PlayerIndexEventArgs e)

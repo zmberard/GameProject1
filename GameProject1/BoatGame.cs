@@ -60,6 +60,7 @@ namespace GameProject1
 
         private float _pauseAlpha;
         private readonly InputAction _pauseAction;
+       
 
         /// <summary>
         /// Constructs the game
@@ -226,11 +227,21 @@ namespace GameProject1
 
                         if (i.isHit == true && i.wasHit == false)
                         {
-                            boat.Color = Color.Red;
-                            damage.Play();
                             boat.Damage -= 30;
+                            boat.Color = Color.Red;
+                            if (boat.Damage > 0)
+                            {
+                                damage.Play();
+                            }
+                            else
+                            {
+                                death.Play();
+                                ScreenManager.AddScreen(new DeathScreen(), ControllingPlayer);
+                            }
+                            
                             i.isHit = false;
                             i.wasHit = true;
+                            
                         }
 
                     }
@@ -250,11 +261,21 @@ namespace GameProject1
 
                         if (d.isHit == true && d.wasHit == false)
                         {
-                            boat.Color = Color.Red;
-                            damage.Play();
                             boat.Damage -= 10;
+                            boat.Color = Color.Red;
+                            if (boat.Damage > 0)
+                            {
+                                damage.Play();
+                            }  
+                            else
+                            {
+                                death.Play();
+                                ScreenManager.AddScreen(new DeathScreen(), ControllingPlayer);
+                            }
+                            
                             d.isHit = false;
                             d.wasHit = true;
+                            
                         }
 
                     }
@@ -270,8 +291,11 @@ namespace GameProject1
                     lifePreserver.Collected = true;
                     preserversLeft--;
                     preserverPickup.Play();
+                    ScreenManager.AddScreen(new VictoryScreen(), ControllingPlayer);
 
                 }
+
+                
 
 
                 
@@ -344,7 +368,7 @@ namespace GameProject1
             boat.Draw(gameTime, _spriteBatch);
             _spriteBatch.DrawString(spriteFont, $"Preservers Left: {preserversLeft}", new Vector2(2, 2), Color.Gold);
             _spriteBatch.DrawString(spriteFont, $"Damage: {boat.Damage}", new Vector2(2, 29), Color.Gold);
-            _spriteBatch.DrawString(escText, "press esc. to exit", new Vector2(600, 440), Color.White);
+            //_spriteBatch.DrawString(escText, "press esc. to exit", new Vector2(600, 440), Color.White);
             _spriteBatch.End();
 
             // TODO: Add your drawing code here
