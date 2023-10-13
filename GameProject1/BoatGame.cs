@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using SharpDX.Direct2D1;
 using SharpDX.DXGI;
+using SharpDX.MediaFoundation;
 using System;
 using System.Drawing;
 using System.Reflection.Metadata;
@@ -32,16 +33,24 @@ namespace GameProject1
         private GraphicsDeviceManager _graphics;
         //private SpriteBatch _spriteBatch;
         private InputManager inputManager;
+        
+        //objects and object counters
         private Boat boat;
         private LifePreserver lifePreserver;
         private Iceberg[] iceberg;
         private Driftwood[] driftwood;
         private SpriteFont spriteFont;
         private int preserversLeft = 1;
+        private Texture2D _background;
+
+        //sounds
         private SpriteFont escText;
         private SoundEffect preserverPickup;
         private SoundEffect damage;
         private SoundEffect death;
+
+        //particle effects
+        private BoatParticle crashParticle;
 
         private Song backgroundMusic;
 
@@ -69,10 +78,11 @@ namespace GameProject1
         {
             TransitionOnTime = TimeSpan.FromSeconds(1.5);
             TransitionOffTime = TimeSpan.FromSeconds(0.5);
-
+            
             _pauseAction = new InputAction(
                new[] { Buttons.Start, Buttons.Back },
                new[] { Keys.Back }, true);
+            
 
         }
 
@@ -82,6 +92,10 @@ namespace GameProject1
                 _content = new ContentManager(ScreenManager.Game.Services, "Content");
 
             _gameFont = _content.Load<SpriteFont>("gamefont");
+
+            crashParticle = new BoatParticle(ScreenManager.Game, 20);
+            ScreenManager.Game.Components.Add(crashParticle);
+
 
             // A real game would probably have more content than this sample, so
             // it would take longer to load. We simulate that by delaying for a
@@ -101,6 +115,7 @@ namespace GameProject1
                 new Driftwood(generateSpawnPoint(3, SpriteType.driftwood)),
                 new Driftwood(generateSpawnPoint(3, SpriteType.driftwood))
             };
+            _background = ScreenManager.Game.Content.Load<Texture2D>("whale background");
             //_spriteBatch = new SpriteBatch(GraphicsDevice);
             boat.LoadContent(_content);
             lifePreserver.LoadContent(_content);
@@ -232,11 +247,13 @@ namespace GameProject1
                             if (boat.Damage > 0)
                             {
                                 damage.Play();
+                                crashParticle.PlaceFirework(new Vector2(_playerPosition.X, _playerPosition.Y - 30));
                             }
                             else
                             {
                                 death.Play();
                                 ScreenManager.AddScreen(new DeathScreen(), ControllingPlayer);
+                                crashParticle.PlaceFirework(new Vector2(_playerPosition.X, _playerPosition.Y - 30));
                             }
                             
                             i.isHit = false;
@@ -266,11 +283,13 @@ namespace GameProject1
                             if (boat.Damage > 0)
                             {
                                 damage.Play();
+                                crashParticle.PlaceFirework(new Vector2(_playerPosition.X, _playerPosition.Y - 30));
                             }  
                             else
                             {
                                 death.Play();
                                 ScreenManager.AddScreen(new DeathScreen(), ControllingPlayer);
+                                crashParticle.PlaceFirework(new Vector2(_playerPosition.X, _playerPosition.Y - 30));
                             }
                             
                             d.isHit = false;
@@ -301,6 +320,7 @@ namespace GameProject1
                 
             }
         }
+        
         public override void HandleInput(GameTime gameTime, InputState input)
         {
             if (input == null)
@@ -314,6 +334,7 @@ namespace GameProject1
 
             // The game pauses either if the user presses the pause button, or if
             // they unplug the active gamepad. This requires us to keep track of
+            // whether a gamepad was ever plugged in, because we don't want to pause
             // whether a gamepad was ever plugged in, because we don't want to pause
             // on PC if they are playing with a keyboard and have no gamepad at all!
             bool gamePadDisconnected = !gamePadState.IsConnected && input.GamePadWasConnected[playerIndex];
@@ -347,17 +368,33 @@ namespace GameProject1
 
                 if (movement.Length() > 1)
                     movement.Normalize();
-
+                
                 _playerPosition += movement * 2.5f;
                 boat.Position = _playerPosition;
             }
         }
-
+        /// <summary>
+        /// Draws all components for my BoatGame
+        /// </summary>
+        /// <param name="gameTime">the in game time</param>
         public override void Draw(GameTime gameTime)
         {
             ScreenManager.GraphicsDevice.Clear(Color.SteelBlue);
 
             var _spriteBatch = ScreenManager.SpriteBatch;
+
+            //float playerY = MathHelper.Clamp(_playerPosition.Y, 100, 3200);
+            float offsetY = 100 - _playerPosition.Y;
+
+            //requirement 1 met: sprite transform
+            Matrix transform;
+
+
+
+            transform = Matrix.CreateTranslation(0, offsetY - 3000, 0);
+            _spriteBatch.Begin(transformMatrix: transform);
+            _spriteBatch.Draw(_background, Vector2.Zero , Color.White);
+            _spriteBatch.End();
 
             _spriteBatch.Begin();
             lifePreserver.Draw(gameTime, _spriteBatch);
@@ -370,6 +407,8 @@ namespace GameProject1
             _spriteBatch.DrawString(spriteFont, $"Damage: {boat.Damage}", new Vector2(2, 29), Color.Gold);
             //_spriteBatch.DrawString(escText, "press esc. to exit", new Vector2(600, 440), Color.White);
             _spriteBatch.End();
+
+           
 
             // TODO: Add your drawing code here
             if (TransitionPosition > 0 || _pauseAlpha > 0)
