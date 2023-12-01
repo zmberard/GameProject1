@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using GameProject1.StateManagement;
+using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Content;
 
 namespace GameProject1.Screens
 {
@@ -20,6 +22,12 @@ namespace GameProject1.Screens
         private readonly InputAction _menuSelect;
         private readonly InputAction _menuCancel;
 
+        public int song = 0;
+
+        private Song _menuMusic;
+        public ContentManager _content;
+        
+
         // Gets the list of menu entries, so derived classes can add or change the menu contents.
         protected IList<MenuEntry> MenuEntries => _menuEntries;
 
@@ -29,6 +37,8 @@ namespace GameProject1.Screens
 
             TransitionOnTime = TimeSpan.FromSeconds(0.5);
             TransitionOffTime = TimeSpan.FromSeconds(0.5);
+
+            
 
             _menuUp = new InputAction(
                 new[] { Buttons.DPadUp, Buttons.LeftThumbstickUp },
@@ -42,6 +52,8 @@ namespace GameProject1.Screens
             _menuCancel = new InputAction(
                 new[] { Buttons.B, Buttons.Back },
                 new[] { Keys.Back }, true);
+
+            
         }
 
         // Responds to user input, changing the selected entry and accepting or cancelling the menu.
@@ -89,6 +101,8 @@ namespace GameProject1.Screens
         // Helper overload makes it easy to use OnCancel as a MenuEntry event handler.
         protected void OnCancel(object sender, PlayerIndexEventArgs e)
         {
+            MediaPlayer.Stop();
+            song = 0;
             OnCancel(e.PlayerIndex);
         }
 
@@ -139,6 +153,18 @@ namespace GameProject1.Screens
         {
             // make sure our entries are in the right place before we draw them
             UpdateMenuEntryLocations();
+
+            if (_content == null)
+                _content = new ContentManager(ScreenManager.Game.Services, "Content");
+            _menuMusic = _content.Load<Song>("MenuSong");
+
+            if (song == 0)
+            {
+                MediaPlayer.Volume = 0.45f;
+                MediaPlayer.IsRepeating = true;
+                MediaPlayer.Play(_menuMusic);
+                song = 1;
+            }
 
             var graphics = ScreenManager.GraphicsDevice;
             var spriteBatch = ScreenManager.SpriteBatch;

@@ -6,8 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
+using GameProject1.Collisions;
 
-namespace GameProject1
+namespace GameProject1.Obstacles
 {
     public class Driftwood
     {
@@ -23,7 +24,7 @@ namespace GameProject1
 
         private BoundingRectangle bounds;
 
-        
+
         /// <summary>
         /// bonding volume of the sprite
         /// </summary>
@@ -40,7 +41,7 @@ namespace GameProject1
         public Driftwood(Vector2 position)
         {
             this.position = position;
-            this.bounds = new BoundingRectangle(position + new Vector2(23, 87), 82, 17);
+            bounds = new BoundingRectangle(position + new Vector2(23, 87), 82, 17);
         }
 
         /// <summary>

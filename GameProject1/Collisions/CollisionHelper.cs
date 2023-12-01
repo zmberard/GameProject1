@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameProject1
+namespace GameProject1.Collisions
 {
     public class CollisionHelper
     {
@@ -17,9 +17,9 @@ namespace GameProject1
         /// <returns>true for collision</returns>
         public static bool Collides(BoundingCircle a, BoundingCircle b)
         {
-            return Math.Pow(a.Radius + b.Radius, 2) >= (
+            return Math.Pow(a.Radius + b.Radius, 2) >= 
                 Math.Pow(a.Center.X - b.Center.X, 2) +
-                Math.Pow(a.Center.Y - b.Center.Y, 2));
+                Math.Pow(a.Center.Y - b.Center.Y, 2);
         }
         /// <summary>
         /// detects rectangle collisions between 2 bounding rectangles
@@ -42,18 +42,18 @@ namespace GameProject1
         {
             float nearestX = MathHelper.Clamp(c.Center.X, r.Left, r.Right);
             float nearestY = MathHelper.Clamp(c.Center.Y, r.Top, r.Bottom);
-            return Math.Pow(c.Radius, 2) >= (
+            return Math.Pow(c.Radius, 2) >= 
                 Math.Pow(c.Center.X - nearestX, 2) +
-                Math.Pow(c.Center.Y - nearestY, 2));
+                Math.Pow(c.Center.Y - nearestY, 2);
         }
 
         public static bool Collides(BoundingRectangle r, BoundingCircle c)
         {
             float nearestX = MathHelper.Clamp(c.Center.X, r.Left, r.Right);
             float nearestY = MathHelper.Clamp(c.Center.Y, r.Top, r.Bottom);
-            return Math.Pow(c.Radius, 2) >= (
+            return Math.Pow(c.Radius, 2) >= 
                 Math.Pow(c.Center.X - nearestX, 2) +
-                Math.Pow(c.Center.Y - nearestY, 2));
+                Math.Pow(c.Center.Y - nearestY, 2);
         }
     }
 }

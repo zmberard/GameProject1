@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GameProject1.Collisions;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameProject1
+namespace GameProject1.BoatThings
 {
     public enum Direction
     {
@@ -155,11 +156,11 @@ namespace GameProject1
                 animationTimer -= 0.3;
             }
             //draws the animation
-            SpriteEffects spriteEffects = (turningDown) ? SpriteEffects.FlipVertically : SpriteEffects.None;
+            SpriteEffects spriteEffects = turningDown ? SpriteEffects.FlipVertically : SpriteEffects.None;
             var source = new Rectangle(animationFrame * 200, (int)Direction * 200, 200, 200);
             spriteBatch.Draw(texture, Position, source, Color, rotation, new Vector2(110, 110), .7f, spriteEffects, 0);
         }
-        
+
 
     }
 }

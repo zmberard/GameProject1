@@ -1,4 +1,5 @@
-﻿using GameProject1.StateManagement;
+﻿using GameProject1.Obstacles;
+using GameProject1.StateManagement;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;

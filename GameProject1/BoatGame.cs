@@ -1,4 +1,6 @@
-﻿using GameProject1.Screens;
+﻿using GameProject1.BoatThings;
+using GameProject1.Obstacles;
+using GameProject1.Screens;
 using GameProject1.StateManagement;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -115,7 +117,7 @@ namespace GameProject1
                 new Driftwood(generateSpawnPoint(3, SpriteType.driftwood)),
                 new Driftwood(generateSpawnPoint(3, SpriteType.driftwood))
             };
-            _background = ScreenManager.Game.Content.Load<Texture2D>("whale background");
+            //_background = ScreenManager.Game.Content.Load<Texture2D>("whale background");
             //_spriteBatch = new SpriteBatch(GraphicsDevice);
             boat.LoadContent(_content);
             lifePreserver.LoadContent(_content);
@@ -393,7 +395,7 @@ namespace GameProject1
 
             transform = Matrix.CreateTranslation(0, offsetY - 3000, 0);
             _spriteBatch.Begin(transformMatrix: transform);
-            _spriteBatch.Draw(_background, Vector2.Zero , Color.White);
+            //_spriteBatch.Draw(_background, Vector2.Zero , Color.White);
             _spriteBatch.End();
 
             _spriteBatch.Begin();
