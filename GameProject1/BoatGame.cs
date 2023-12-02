@@ -20,6 +20,7 @@ using System.Transactions;
 using Color = Microsoft.Xna.Framework.Color;
 using SpriteBatch = Microsoft.Xna.Framework.Graphics.SpriteBatch;
 
+
 namespace GameProject1
 {
     public enum SpriteType
@@ -30,6 +31,8 @@ namespace GameProject1
 
     public class BoatGame : GameScreen
     {
+        const float LINEAR_ACCELERATION = 10;
+        const float ANGULAR_ACCELERATION = 5;
         private ContentManager _content;
         private SpriteFont _gameFont;
         private GraphicsDeviceManager _graphics;
@@ -126,11 +129,11 @@ namespace GameProject1
             spriteFont = _content.Load<SpriteFont>("OverlockSC");
             escText = _content.Load<SpriteFont>("Arial");
             // TODO: use this.Content to load your game content here
-            backgroundMusic = _content.Load<Song>("my-heart-will-go-on-titanic-theme");
+            backgroundMusic = _content.Load<Song>("OCEAN SOUND EFFECT");
             preserverPickup = _content.Load<SoundEffect>("Pickup_Coin3");
             death = _content.Load<SoundEffect>("Explosion6");
             damage = _content.Load<SoundEffect>("Explosion14");
-            MediaPlayer.Volume = 0.45f;
+            MediaPlayer.Volume = 0.15f;
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Play(backgroundMusic);
             // once the load has finished, we use ResetElapsedTime to tell the game's
@@ -229,7 +232,7 @@ namespace GameProject1
                 _pauseAlpha = Math.Max(_pauseAlpha - 1f / 32, 0);
             if (IsActive)
             {
-                boat.Position += inputManager.Direction;
+                //boat.Position += inputManager.Direction;
 
                 boat.Update(gameTime);
                 boat.Color = Color.White;
@@ -312,7 +315,7 @@ namespace GameProject1
                     lifePreserver.Collected = true;
                     preserversLeft--;
                     preserverPickup.Play();
-                    ScreenManager.AddScreen(new VictoryScreen(), ControllingPlayer);
+                    ScreenManager.AddScreen(new Cutscene(), ControllingPlayer);
 
                 }
 
@@ -348,9 +351,16 @@ namespace GameProject1
             }
             else
             {
+
+                keyboardState = Keyboard.GetState();
+                float t = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                
+
+
                 // Otherwise move the player position.
                 var movement = Vector2.Zero;
-
+                
                 if (keyboardState.IsKeyDown(Keys.Left))
                     movement.X--;
 
@@ -371,6 +381,7 @@ namespace GameProject1
                 if (movement.Length() > 1)
                     movement.Normalize();
                 
+
                 _playerPosition += movement * 2.5f;
                 boat.Position = _playerPosition;
             }

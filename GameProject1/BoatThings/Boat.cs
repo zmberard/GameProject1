@@ -29,6 +29,16 @@ namespace GameProject1.BoatThings
         /// </summary>
         //Game game;
 
+        const float LINEAR_ACCELERATION = 10;
+        const float ANGULAR_ACCELERATION = 2;
+
+        public float angle;
+        public float angularVelocity;
+
+        Vector2 position;
+        public Vector2 velocity;
+        public Vector2 direction;
+
         /// <summary>
         /// The texture to apply to a boat
         /// </summary>
@@ -67,12 +77,13 @@ namespace GameProject1.BoatThings
         /// </summary>
         /// <param name="game">The game this ball belongs in</param>
         /// <param name="color">A color to distinguish this ball</param>
-        /*public Boat(Game game)
+        public Boat()
         {
-            //this.game = game;
+            this.position = new Vector2(375, 250);
+            direction = -Vector2.UnitY;
 
         }
-        */
+        
 
         /// <summary>
         /// Loads the boat's texture
@@ -89,8 +100,10 @@ namespace GameProject1.BoatThings
         {
             directionTimer += gameTime.ElapsedGameTime.TotalSeconds;
             gamePadState = GamePad.GetState(0);
-            keyboardState = Keyboard.GetState();
-            /*
+            KeyboardState keyboardState = Keyboard.GetState();
+           
+
+            
             // Apply the gamepad movement with inverted Y axis
             Position += gamePadState.ThumbSticks.Left * new Vector2(1, -1);
             if (gamePadState.ThumbSticks.Left.X < 0) rotation = 90;
@@ -131,7 +144,7 @@ namespace GameProject1.BoatThings
                 
 
             }
-            */
+            
             //updates bounds
             bounds.X = Position.X - 16;
             bounds.Y = Position.Y - 16;
@@ -158,7 +171,7 @@ namespace GameProject1.BoatThings
             //draws the animation
             SpriteEffects spriteEffects = turningDown ? SpriteEffects.FlipVertically : SpriteEffects.None;
             var source = new Rectangle(animationFrame * 200, (int)Direction * 200, 200, 200);
-            spriteBatch.Draw(texture, Position, source, Color, rotation, new Vector2(110, 110), .7f, spriteEffects, 0);
+            spriteBatch.Draw(texture, Position, source, Color, angle, new Vector2(110, 110), .7f, spriteEffects, 0);
         }
 
 

@@ -36,6 +36,7 @@ namespace GameProject1.Screens
         public MenuEntry(string text)
         {
             _text = text;
+            
         }
 
         public virtual void Update(MenuScreen screen, bool isSelected, GameTime gameTime)
@@ -55,7 +56,7 @@ namespace GameProject1.Screens
         // This can be overridden to customize the appearance.
         public virtual void Draw(MenuScreen screen, bool isSelected, GameTime gameTime)
         {
-            var color = isSelected ? Color.Yellow : Color.White;
+            var color = isSelected ? Color.Gold : Color.Black;
 
             // Pulsate the size of the selected menu entry.
             double time = gameTime.TotalGameTime.TotalSeconds;

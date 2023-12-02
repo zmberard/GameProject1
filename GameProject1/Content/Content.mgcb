@@ -80,6 +80,18 @@
 /processorParam:TextureFormat=Color
 /build:BoatSprite.png
 
+#begin CaptainCutscene.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:CaptainCutscene.png
+
 #begin circle.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -220,11 +232,23 @@
 /processorParam:Quality=Best
 /build:MenuSong.mp3
 
+#begin Morse Code Sound Effect.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Morse Code Sound Effect.mp3
+
 #begin my-heart-will-go-on-titanic-theme.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:my-heart-will-go-on-titanic-theme.mp3
+
+#begin OCEAN SOUND EFFECT.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:OCEAN SOUND EFFECT.mp3
 
 #begin OverlockSC.spritefont
 /importer:FontDescriptionImporter
@@ -238,6 +262,18 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Pickup_Coin3.wav
+
+#begin shipbackground.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:shipbackground.png
 
 #begin splash.png
 /importer:TextureImporter

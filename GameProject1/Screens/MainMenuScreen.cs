@@ -1,17 +1,24 @@
 ﻿using Microsoft.Xna.Framework;
 using GameProject1.StateManagement;
 using GameProject1;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Media;
 
 namespace GameProject1.Screens
 {
     // The main menu screen is the first thing displayed when the game starts up.
     public class MainMenuScreen : MenuScreen
     {
+        private Song _menuMusic;
+        public ContentManager _content;
+
         public MainMenuScreen() : base("Rouge Wave")
         {
             var playGameMenuEntry = new MenuEntry("Play Game");
             var optionsMenuEntry = new MenuEntry("Options");
             var exitMenuEntry = new MenuEntry("Exit");
+
+            
 
             playGameMenuEntry.Selected += PlayGameMenuEntrySelected;
             optionsMenuEntry.Selected += OptionsMenuEntrySelected;
@@ -24,7 +31,9 @@ namespace GameProject1.Screens
 
         private void PlayGameMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {
-            LoadingScreen.Load(ScreenManager, true, e.PlayerIndex, new BoatGame());
+            
+            
+            LoadingScreen.Load(ScreenManager, true, e.PlayerIndex, new SplashScreen());
         }
 
         private void OptionsMenuEntrySelected(object sender, PlayerIndexEventArgs e)
