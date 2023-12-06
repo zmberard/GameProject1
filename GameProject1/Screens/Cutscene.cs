@@ -37,7 +37,7 @@ namespace GameProject1.Screens
             _textDisplayTime = TimeSpan.FromSeconds(20);
             MediaPlayer.Stop();
             MediaPlayer.Volume = .45f;
-            _background = _content.Load<Texture2D>("CaptainCutscene");
+            _background = _content.Load<Texture2D>("cutscenebackground");
             //MediaPlayer.Play(_morseCodeSoundEffect);
 
             _gameFont1 = _content.Load<SpriteFont>("OverlockSC");
