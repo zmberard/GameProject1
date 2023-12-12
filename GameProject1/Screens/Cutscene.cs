@@ -26,7 +26,14 @@ namespace GameProject1.Screens
         private SpriteFont _gameFont2;
         private SpriteFont _gameFont3;
 
+        private int damage;
+
         private Song _morseCodeSoundEffect;
+
+        public Cutscene(int Damage)
+        {
+            damage = Damage;
+        }
 
         public override void Activate()
         {
@@ -54,7 +61,7 @@ namespace GameProject1.Screens
             if (_whiteTextDisplayTime <= TimeSpan.Zero) 
             {
                 ExitScreen();
-                LoadingScreen.Load(ScreenManager, true, PlayerIndex.One, new VictoryScreen());
+                LoadingScreen.Load(ScreenManager, true, PlayerIndex.One, new BoatGameLevel2(damage));
             } 
 
         }

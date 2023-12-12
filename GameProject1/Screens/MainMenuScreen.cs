@@ -12,7 +12,7 @@ namespace GameProject1.Screens
         private Song _menuMusic;
         public ContentManager _content;
 
-        public MainMenuScreen() : base("Rouge Wave")
+        public MainMenuScreen() : base("Rogue Wave")
         {
             var playGameMenuEntry = new MenuEntry("Play Game");
             var optionsMenuEntry = new MenuEntry("Options");

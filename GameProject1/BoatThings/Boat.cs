@@ -29,20 +29,24 @@ namespace GameProject1.BoatThings
         /// </summary>
         //Game game;
 
-        const float LINEAR_ACCELERATION = 10;
-        const float ANGULAR_ACCELERATION = 2;
-
         public float angle;
-        public float angularVelocity;
+        
 
-        Vector2 position;
-        public Vector2 velocity;
-        public Vector2 direction;
+        public Vector2 Origin = new Vector2(110, 110);
+        
+        /// <summary>
+        /// Velocity
+        /// </summary>
+        public Vector2 velocity { get; set; }
+        /// <summary>
+        /// Velocity of the boat
+        /// </summary>
+        public Vector2 direction { get; set;  }
 
         /// <summary>
         /// The texture to apply to a boat
         /// </summary>
-        Texture2D texture;
+        public Texture2D texture;
         /// <summary>
         /// color of boat
         /// </summary>
@@ -57,10 +61,12 @@ namespace GameProject1.BoatThings
 
         public BoundingRectangle Bounds => bounds;
 
+
+        public Game game;
         /// <summary>
         /// The position of the boat in the game world
         /// </summary>
-        public Vector2 Position { get; set; }
+        public Vector2 Position;
 
         private double directionTimer;
 
@@ -77,10 +83,11 @@ namespace GameProject1.BoatThings
         /// </summary>
         /// <param name="game">The game this ball belongs in</param>
         /// <param name="color">A color to distinguish this ball</param>
-        public Boat()
+        public Boat(Game g)
         {
-            this.position = new Vector2(375, 250);
+            this.Position = new Vector2(375, 250);
             direction = -Vector2.UnitY;
+            game = g;
 
         }
         
@@ -109,49 +116,80 @@ namespace GameProject1.BoatThings
             if (gamePadState.ThumbSticks.Left.X < 0) rotation = 90;
             if (gamePadState.ThumbSticks.Left.X > 0) rotation = 90;
 
+            direction = new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation));
+
             // Apply keyboard movement
             if (keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.W))
             {
+                
                 Position += new Vector2(0, -1);
                 turningUp = true;
                 rotation = 0;
                 turningDown = false;
+                //angle = 0;
                 
+                //Position += direction * LinearVelocity;
+
             }
             if (keyboardState.IsKeyDown(Keys.Down) || keyboardState.IsKeyDown(Keys.S))
             {
+                
                 Position += new Vector2(0, 1);
                 turningUp = false;
-                
+                //angle = 0;
                 turningDown = true;
                 
+                //Position -= direction * LinearVelocity;
             }
             if (keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.A))
             {
+                
                 Position += new Vector2(-1, 0);
                 turningUp = false;
-                rotation = 175;
+                //rotation = 175;
                 turningDown = false;
+                //angle = 90;
                 
+                //rotation -= MathHelper.ToRadians(RotationVelocity);
 
             }
             if (keyboardState.IsKeyDown(Keys.Right) || keyboardState.IsKeyDown(Keys.D))
             {
+                
                 Position += new Vector2(1, 0);
                 turningUp = false;
-                rotation = 95;
+                rotation = 180;
                 turningDown = false;
+                //angle = 180;
                 
-
+                //rotation += MathHelper.ToRadians(RotationVelocity);
+                //Position = new Vector2(0,0);
             }
             
             //updates bounds
+            
+
+            
+
+            var viewport = game.GraphicsDevice.Viewport;
+            if (Position.Y < 0) Position.Y = viewport.Height;
+            if (Position.Y > viewport.Height)
+            {
+                Position.Y = 0;
+                Position = new Vector2(Position.X, 0);
+            }
+            if (Position.X < 0) Position.X = viewport.Width;
+            if (Position.X > viewport.Width) Position.X = 0;
+
             bounds.X = Position.X - 16;
             bounds.Y = Position.Y - 16;
 
-
-
         }
+
+
+
+
+
         /// <summary>
         /// Draws the boat at its current position
         /// </summary>
@@ -170,8 +208,10 @@ namespace GameProject1.BoatThings
             }
             //draws the animation
             SpriteEffects spriteEffects = turningDown ? SpriteEffects.FlipVertically : SpriteEffects.None;
+            SpriteEffects spriteEffects1 = turningUp ? SpriteEffects.FlipVertically : SpriteEffects.None;
             var source = new Rectangle(animationFrame * 200, (int)Direction * 200, 200, 200);
-            spriteBatch.Draw(texture, Position, source, Color, angle, new Vector2(110, 110), .7f, spriteEffects, 0);
+            
+            spriteBatch.Draw(texture, Position, source, Color, angle, Origin, .7f, SpriteEffects.None, 0);
         }
 
 

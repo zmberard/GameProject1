@@ -23,14 +23,9 @@ using SpriteBatch = Microsoft.Xna.Framework.Graphics.SpriteBatch;
 
 namespace GameProject1
 {
-    public enum SpriteType
-    {
-        iceberg,
-        driftwood,
-        tentacle
-    }
+    
 
-    public class BoatGame : GameScreen
+    public class BoatGameLevel2 : GameScreen
     {
         const float LINEAR_ACCELERATION = 10;
         const float ANGULAR_ACCELERATION = 5;
@@ -39,16 +34,17 @@ namespace GameProject1
         private GraphicsDeviceManager _graphics;
         //private SpriteBatch _spriteBatch;
         private InputManager inputManager;
-        
+        private int boatDam;
+
         //objects and object counters
         private Boat boat;
-        private LifePreserver lifePreserver;
+        private LifePreserver[] lifePreserver;
         private Iceberg[] iceberg;
         private Driftwood[] driftwood;
         private SpriteFont spriteFont;
-        private int preserversLeft = 1;
+        private int preserversLeft = 2;
         private Texture2D _background;
-        private Tentacle tentacle;
+
         //sounds
         private SpriteFont escText;
         private SoundEffect preserverPickup;
@@ -65,30 +61,30 @@ namespace GameProject1
 
         public Random rng = new Random();
 
-        public int[] icebergXpos = new int[3] { 400, 275, 600 };
-        public int[] icebergYpos = new int[3] { 200, 75, 275 };
+        public int[] icebergXpos = new int[4] { 400, 275, 600, 700 };
+        public int[] icebergYpos = new int[4] { 200, 75, 275, 250 };
 
-        public int[] driftwoodXpos = new int[3] { 100, 300, 600 };
-        public int[] driftwoodYpos = new int[3] { 100, 150, 300 };
+        public int[] driftwoodXpos = new int[4] { 100, 300, 600, 200 };
+        public int[] driftwoodYpos = new int[4] { 100, 150, 300, 350 };
 
         private readonly Random _random = new Random();
 
         private float _pauseAlpha;
         private readonly InputAction _pauseAction;
-       
+
 
         /// <summary>
         /// Constructs the game
         /// </summary>
-        public BoatGame()
+        public BoatGameLevel2(int Damage)
         {
             TransitionOnTime = TimeSpan.FromSeconds(1.5);
             TransitionOffTime = TimeSpan.FromSeconds(0.5);
-            
+            boatDam = Damage;
             _pauseAction = new InputAction(
                new[] { Buttons.Start, Buttons.Back },
                new[] { Keys.Back }, true);
-            
+
 
         }
 
@@ -102,16 +98,21 @@ namespace GameProject1
             crashParticle = new BoatParticle(ScreenManager.Game, 20);
             ScreenManager.Game.Components.Add(crashParticle);
 
-
+            
             // A real game would probably have more content than this sample, so
             // it would take longer to load. We simulate that by delaying for a
             // while, giving you a chance to admire the beautiful loading screen.
             Thread.Sleep(1000);
             boat = new Boat(ScreenManager.Game);
-            //tentacle = new Tentacle(new Vector2(5, 5),);
-            lifePreserver = new LifePreserver(new Vector2(655, 10));
+            lifePreserver = new LifePreserver[]
+            {
+                new LifePreserver(new Vector2(655, 10)),
+                new LifePreserver(new Vector2(655, 355))
+            };
+            
             iceberg = new Iceberg[]
             {
+                new Iceberg(generateSpawnPoint(3, SpriteType.iceberg)),
                 new Iceberg(generateSpawnPoint(3, SpriteType.iceberg)),
                 new Iceberg(generateSpawnPoint(3, SpriteType.iceberg)),
                 new Iceberg(generateSpawnPoint(3, SpriteType.iceberg))
@@ -120,13 +121,14 @@ namespace GameProject1
             {
                 new Driftwood(generateSpawnPoint(3, SpriteType.driftwood)),
                 new Driftwood(generateSpawnPoint(3, SpriteType.driftwood)),
+                new Driftwood(generateSpawnPoint(3, SpriteType.driftwood)),
                 new Driftwood(generateSpawnPoint(3, SpriteType.driftwood))
             };
             //_background = ScreenManager.Game.Content.Load<Texture2D>("whale background");
             //_spriteBatch = new SpriteBatch(GraphicsDevice);
             boat.LoadContent(_content);
-            lifePreserver.LoadContent(_content);
-            //tentacle.LoadContent(_content);
+            boat.Damage = boatDam;
+            foreach (LifePreserver l in lifePreserver) l.LoadContent(_content);
             foreach (Iceberg i in iceberg) i.LoadContent(_content);
             foreach (Driftwood d in driftwood) d.LoadContent(_content);
             spriteFont = _content.Load<SpriteFont>("OverlockSC");
@@ -142,7 +144,7 @@ namespace GameProject1
             // once the load has finished, we use ResetElapsedTime to tell the game's
             // timing mechanism that we have just finished a very long frame, and that
             // it should not try to catch up.
-            
+
             boat.Position = _playerPosition;
             inputManager = new InputManager();
 
@@ -150,51 +152,51 @@ namespace GameProject1
         }
         //new Iceberg(generateSpawnPoint(2, SpriteType.iceberg));
         //new Driftwood(generateSpawnPoint(2, SpriteType.driftwood));
-       /*
-        protected override void Initialize()
-        {
-            // TODO: Add your initialization logic here
-            boat = new Boat(this);
-            boat.Position = new Vector2(50, 375);
-            inputManager = new InputManager();
-            lifePreserver = new LifePreserver(new Vector2(655, 10));
-            iceberg = new Iceberg[]
-            {
-                new Iceberg(generateSpawnPoint(3, SpriteType.iceberg)),
-                new Iceberg(generateSpawnPoint(3, SpriteType.iceberg)),
-                new Iceberg(generateSpawnPoint(3, SpriteType.iceberg))
-            };
+        /*
+         protected override void Initialize()
+         {
+             // TODO: Add your initialization logic here
+             boat = new Boat(this);
+             boat.Position = new Vector2(50, 375);
+             inputManager = new InputManager();
+             lifePreserver = new LifePreserver(new Vector2(655, 10));
+             iceberg = new Iceberg[]
+             {
+                 new Iceberg(generateSpawnPoint(3, SpriteType.iceberg)),
+                 new Iceberg(generateSpawnPoint(3, SpriteType.iceberg)),
+                 new Iceberg(generateSpawnPoint(3, SpriteType.iceberg))
+             };
 
-            driftwood = new Driftwood[]
-            {
-                new Driftwood(generateSpawnPoint(3, SpriteType.driftwood)),
-                new Driftwood(generateSpawnPoint(3, SpriteType.driftwood)),
-                new Driftwood(generateSpawnPoint(3, SpriteType.driftwood))
-            };
-            base.Initialize();
-        }
-       */
+             driftwood = new Driftwood[]
+             {
+                 new Driftwood(generateSpawnPoint(3, SpriteType.driftwood)),
+                 new Driftwood(generateSpawnPoint(3, SpriteType.driftwood)),
+                 new Driftwood(generateSpawnPoint(3, SpriteType.driftwood))
+             };
+             base.Initialize();
+         }
+        */
         public Vector2 generateSpawnPoint(int bound, SpriteType spriteType)
         {
             int X = 0;
             int Y = 0;
-            if(spriteType == 0)
+            if (spriteType == 0)
             {
                 X = icebergXpos[rng.Next(bound)];//returns random integers < bound
                 Y = icebergYpos[rng.Next(bound)];
-                
+
             }
             else
             {
                 X = driftwoodXpos[rng.Next(bound)];//returns random integers < bound
                 Y = driftwoodYpos[rng.Next(bound)];
             }
-            
-            
-            return new Vector2(X,Y);
+
+
+            return new Vector2(X, Y);
         }
 
-        
+
         /*
         protected override void LoadContent()
         {
@@ -263,10 +265,10 @@ namespace GameProject1
                                 ScreenManager.AddScreen(new DeathScreen(), ControllingPlayer);
                                 crashParticle.PlaceFirework(new Vector2(_playerPosition.X, _playerPosition.Y - 30));
                             }
-                            
+
                             i.isHit = false;
                             i.wasHit = true;
-                            
+
                         }
 
                     }
@@ -292,17 +294,17 @@ namespace GameProject1
                             {
                                 damage.Play();
                                 crashParticle.PlaceFirework(new Vector2(_playerPosition.X, _playerPosition.Y - 30));
-                            }  
+                            }
                             else
                             {
                                 death.Play();
                                 ScreenManager.AddScreen(new DeathScreen(), ControllingPlayer);
                                 crashParticle.PlaceFirework(new Vector2(_playerPosition.X, _playerPosition.Y - 30));
                             }
-                            
+
                             d.isHit = false;
                             d.wasHit = true;
-                            
+
                         }
 
                     }
@@ -312,25 +314,32 @@ namespace GameProject1
                     }
                 }
 
-                if (lifePreserver.Bounds.CollidesWith(boat.Bounds) && !lifePreserver.Collected)
+                foreach(LifePreserver l in lifePreserver)
                 {
-                    boat.Color = Color.Red;
-                    lifePreserver.Collected = true;
-                    preserversLeft--;
-                    preserverPickup.Play();
-                    ScreenManager.AddScreen(new Cutscene(boat.Damage), ControllingPlayer);
+                    if (l.Bounds.CollidesWith(boat.Bounds) && !l.Collected)
+                    {
+                        boat.Color = Color.Red;
+                        l.Collected = true;
+                        preserversLeft--;
+                        preserverPickup.Play();
+                        //ScreenManager.AddScreen(new Cutscene(), ControllingPlayer);
 
+                    }
                 }
 
-                
 
 
-                
+                if(preserversLeft == 0)
+                {
+                    ScreenManager.AddScreen(new SecondSplashScreen(boat.Damage), ControllingPlayer);
+                }
+
+                _playerPosition.X = MathHelper.Clamp(_playerPosition.X, 0, ScreenManager.Game.GraphicsDevice.Viewport.Width - (boat.texture.Width / 4) + 200);
+                _playerPosition.Y = MathHelper.Clamp(_playerPosition.Y, 0, ScreenManager.Game.GraphicsDevice.Viewport.Height - boat.texture.Height + 145);
+
             }
-            _playerPosition.X = MathHelper.Clamp(_playerPosition.X, 0, ScreenManager.Game.GraphicsDevice.Viewport.Width - (boat.texture.Width / 4) + 200);
-            _playerPosition.Y = MathHelper.Clamp(_playerPosition.Y, 0, ScreenManager.Game.GraphicsDevice.Viewport.Height - boat.texture.Height + 145);
         }
-        
+
         public override void HandleInput(GameTime gameTime, InputState input)
         {
             if (input == null)
@@ -360,12 +369,12 @@ namespace GameProject1
                 keyboardState = Keyboard.GetState();
                 float t = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                
+
 
 
                 // Otherwise move the player position.
                 var movement = Vector2.Zero;
-                
+
                 if (keyboardState.IsKeyDown(Keys.Left))
                     movement.X--;
 
@@ -385,12 +394,11 @@ namespace GameProject1
 
                 if (movement.Length() > 1)
                     movement.Normalize();
-                
+
 
                 _playerPosition += movement * 2.5f;
                 boat.Position = _playerPosition;
             }
-
         }
         /// <summary>
         /// Draws all components for my BoatGame
@@ -416,10 +424,10 @@ namespace GameProject1
             _spriteBatch.End();
 
             _spriteBatch.Begin();
-            lifePreserver.Draw(gameTime, _spriteBatch);
-            //tentacle.Draw(gameTime, _spriteBatch);
+            foreach(LifePreserver l in lifePreserver) l.Draw(gameTime, _spriteBatch);
+
             foreach (Iceberg i in iceberg) i.Draw(gameTime, _spriteBatch);
-            foreach(Driftwood d in driftwood) d.Draw(gameTime, _spriteBatch);
+            foreach (Driftwood d in driftwood) d.Draw(gameTime, _spriteBatch);
 
             boat.Draw(gameTime, _spriteBatch);
             _spriteBatch.DrawString(spriteFont, $"Preservers Left: {preserversLeft}", new Vector2(2, 2), Color.Gold);
@@ -427,7 +435,7 @@ namespace GameProject1
             //_spriteBatch.DrawString(escText, "press esc. to exit", new Vector2(600, 440), Color.White);
             _spriteBatch.End();
 
-           
+
 
             // TODO: Add your drawing code here
             if (TransitionPosition > 0 || _pauseAlpha > 0)
